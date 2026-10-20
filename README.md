@@ -10,3 +10,30 @@ This repository contains Python and SQL portfolio work:
 ## Movie Data
 
 Place the movie dataset at `data/movies.csv` before running the movie notebook. The dataset is not included in this repository, so use the same `movies.csv` source used for the original analysis.
+
+
+## SQL execution and regression checks
+
+The scripts target SQL Server and an imported `[Portfolio Project]` database.
+Nashville retains the original columns and only lists candidate duplicates; it
+never deletes records. It creates derived columns if absent, handles addresses
+without commas, preserves periods in owner street names, and leaves conflicting
+parcel addresses unresolved for review.
+
+COVID continent totals sum each country's maximum reported cumulative death
+count rather than selecting the largest country. Ratios use decimal arithmetic
+and return NULL for zero denominators. Cumulative vaccinations count doses, not
+unique vaccinated people; `RollingVaccinationDoses` and `DosesPer100People` make
+that distinction explicit. The legacy `PercentPopulationVaccinated` view name
+is retained, but its cumulative column is now `RollingVaccinationDoses`.
+
+With SQL Server and `sqlcmd` installed, run:
+
+```powershell
+python tests/test_sql_server.py --server localhost
+```
+
+The test runs both scripts twice against synthetic data in a uniquely named
+`CodexPortfolioTest_*` database and removes that test database afterward. It does
+not use or change the existing `[Portfolio Project]` database. The test account
+needs permission to create and drop its test database.
